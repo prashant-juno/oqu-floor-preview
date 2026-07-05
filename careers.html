@@ -631,10 +631,10 @@ a{ color:var(--accent); }
       var bb = el.querySelector('.oq-say2');
       if(bb) bb.textContent = says[Math.floor(Math.random()*says.length)];
       setOn(el, true);
-      setTimeout(function(){ setOn(el, false); busy = false; }, 8200);
+      setTimeout(function(){ setOn(el, false); busy = false; }, 6500);
     }
     setTimeout(pop, 2600);
-    (function loop(){ setTimeout(function(){ pop(); loop(); }, 8000 + Math.random()*6000); })();
+    (function loop(){ setTimeout(function(){ pop(); loop(); }, 5500 + Math.random()*4500); })();
   })();
   var btns = Array.prototype.slice.call(document.querySelectorAll('.oq-pal button'));
   btns.forEach(function(b){
