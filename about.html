@@ -292,7 +292,18 @@ a{ color:var(--accent); }
 .oq-foot-bottom{ border-top:1px solid var(--nightline); }
 .oq-foot-bottom-in{ width:var(--w); margin:0 auto; padding:18px 0; display:flex; gap:18px;
   justify-content:space-between; align-items:center; flex-wrap:wrap; }
-.oq-foot-bottom .oq-k{ color:var(--nightink2); font-size:9.5px; }
+.oq-foot-bottom .oq-k{ color:var(--nightink2); font-size:11px; letter-spacing:.09em; }
+.oq-foot-live{ display:inline-flex; align-items:center; gap:9px; margin-top:20px;
+  font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--nightink2); }
+.oq-foot-live i{ width:7px; height:7px; border-radius:50%; background:#4CCB8F; flex:none;
+  animation:oq-livepulse 2.4s ease-out infinite; }
+@keyframes oq-livepulse{ 0%{ box-shadow:0 0 0 0 rgba(76,203,143,.45); }
+  70%{ box-shadow:0 0 0 9px rgba(76,203,143,0); } 100%{ box-shadow:0 0 0 0 rgba(76,203,143,0); } }
+.oq-foot-mark{ overflow:hidden; height:clamp(64px, 9.5vw, 138px); margin-top:30px; margin-bottom:-2px; }
+.oq-foot-mark svg{ display:block; width:var(--w); margin:0 auto; height:auto;
+  color:var(--nightink); opacity:.05; }
+@media (prefers-reduced-motion: reduce){ .oq-foot-live i{ animation:none; } }
 
 /* palette dock */
 .oq-pal{ max-width:min(320px, calc(100vw - 32px)); flex-wrap:wrap; }
@@ -589,6 +600,7 @@ a{ color:var(--accent); }
       <svg class="oq-logo oq-logo--foot" viewBox="0 0 177 44.0001" role="img" aria-label="OQU"><use href="#oquLogo"/></svg>
       <p>Specialist AI agents for lending operations, from the first enquiry to an
         underwritten decision. On your rules, in minutes.</p>
+      <span class="oq-foot-live"><i aria-hidden="true"></i>The floor is open · 24/7</span>
     </div>
     <div class="oq-foot-col">
       <span class="oq-k">Product</span>
@@ -613,9 +625,12 @@ a{ color:var(--accent); }
   </div>
   <div class="oq-foot-bottom">
     <div class="oq-foot-bottom-in">
-      <span class="oq-k">© MMXXVI OQU.ai · Agents collected, chased and cross-checked; a human approved every word.</span>
-      <span class="oq-k">Set in Fraunces and IBM Plex Mono</span>
+      <span class="oq-k">© 2026 OQU.ai · The agents do the paperwork; humans approve every word.</span>
+      <span class="oq-k">The floor is illustrative · no real cases or figures</span>
     </div>
+  </div>
+  <div class="oq-foot-mark" aria-hidden="true">
+    <svg viewBox="0 0 177 44.0001"><use href="#oquLogo"/></svg>
   </div>
 </footer>
 
