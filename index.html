@@ -888,7 +888,7 @@ body{ margin:0; }
 }
 </style>
 
-<div class="oq-sheet" id="oq-sheet" data-pal="c">
+<div class="oq-sheet" id="oq-sheet" data-pal="l">
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"><symbol id="oquLogo" viewBox="0 0 177 44.0001">
 <g id="CTA&#39;s">
 <g id="Vector">
@@ -3082,7 +3082,7 @@ body{ margin:0; }
 <div class="oq-pal" role="group" aria-label="Colour palette">
   <span class="oq-pal-label">Palette</span>
   <div class="oq-pal-dots">
-    <button class="is-on" data-pal="c" title="Fintech green" aria-label="Fintech green" style="background:linear-gradient(135deg,#F5F7F4 45%,#1E6B4F 45%)"></button>
+    <button data-pal="c" title="Fintech green" aria-label="Fintech green" style="background:linear-gradient(135deg,#F5F7F4 45%,#1E6B4F 45%)"></button>
     <button data-pal="a" title="Ledger cream" aria-label="Ledger cream" style="background:linear-gradient(135deg,#F4EEE1 45%,#8A2B2E 45%)"></button>
     <button data-pal="b" title="Midnight brass" aria-label="Midnight brass" style="background:linear-gradient(135deg,#111A25 45%,#D9A441 45%)"></button>
     <button data-pal="d" title="Slate &amp; ember" aria-label="Slate and ember" style="background:linear-gradient(135deg,#F4F5F7 45%,#C2482F 45%)"></button>
@@ -3093,7 +3093,7 @@ body{ margin:0; }
     <button data-pal="i" title="Porcelain &amp; delft" aria-label="Porcelain and delft" style="background:linear-gradient(135deg,#F6F8FA 45%,#2E6E8E 45%)"></button>
     <button data-pal="j" title="Olive &amp; sand" aria-label="Olive and sand" style="background:linear-gradient(135deg,#F5F2EA 45%,#5A6134 45%)"></button>
     <button data-pal="k" title="Burgundy noir" aria-label="Burgundy noir" style="background:linear-gradient(135deg,#171012 45%,#D4626D 45%)"></button>
-    <button data-pal="l" title="Steel &amp; mint" aria-label="Steel and mint" style="background:linear-gradient(135deg,#F4F6F6 45%,#0F7B6C 45%)"></button>
+    <button class="is-on" data-pal="l" title="Steel &amp; mint" aria-label="Steel and mint" style="background:linear-gradient(135deg,#F4F6F6 45%,#0F7B6C 45%)"></button>
     <button data-pal="m" title="Champagne" aria-label="Champagne and charcoal" style="background:linear-gradient(135deg,#F5F1E8 45%,#8C6A2F 45%)"></button>
   </div>
 </div>
@@ -3165,9 +3165,9 @@ body{ margin:0; }
     var lib = {};
     peeks.forEach(function(el){ var im = el.querySelector('img'); if(im && im.getAttribute('src').length > 100) lib[im.getAttribute('data-key')] = im.getAttribute('src'); });
     peeks.forEach(function(el){ var im = el.querySelector('img'); if(im && im.getAttribute('src').length < 100) im.src = lib[im.getAttribute('data-key')] || im.src; });
-    var says = ['oqu oqu!', 'oqu oqu oqu!', 'deal’s ready!', 'working 24/7!', 'ten at once? easy.',
+    var says = ['oqu oqu oqu!', 'deal’s ready!', 'working 24/7!', 'ten at once? easy.',
       'watch this.', 'no rekeying!', 'minutes, not days.', 'chasing the docs!', 'all checked, twice.',
-      'your policy, applied.', 'decision-ready!', 'never sleeps. ever.', 'files, not chaos.', 'oqu oqu oqu!'];
+      'your policy, applied.', 'decision-ready!', 'never sleeps. ever.', 'files, not chaos.', 'zero mismatches!'];
     var laughs = ['hehehe!', 'oqu oqu oqu!', 'all checked!'];
     var busy = false;
     function setOn(el, on){
@@ -3193,9 +3193,13 @@ body{ margin:0; }
       return r.bottom > 60 && r.top < window.innerHeight - 60;
     }
     var current = null, since = 0, offSince = 0, switching = false;
+    var lastSay = '';
     function bubble(el){
       var bb = el.querySelector('.oq-say2');
-      if(bb) bb.textContent = says[Math.floor(Math.random()*says.length)];
+      if(!bb) return;
+      var s = says[Math.floor(Math.random()*says.length)];
+      if(s === lastSay) s = says[(says.indexOf(s) + 1) % says.length];
+      lastSay = s; bb.textContent = s;
     }
     function showEl(el, laughLater){
       current = el; since = Date.now();
@@ -3216,34 +3220,25 @@ body{ margin:0; }
       current.classList.remove('is-laughing');
       current = null; offSince = Date.now();
     }
-    /* hero zone: one mascot ALWAYS on, switching pose every ~4.5s.
-       lower sections: on 6.5s, off 3.5s, always in the section on screen. */
+    /* one mascot is ALWAYS on while any anchor section is on screen;
+       it hops to another visible anchor every few seconds. */
     setInterval(function(){
       if(document.hidden || switching) return;
       var now = Date.now();
-      var heroVis = heroPeeks.filter(inView);
-      if(current){
-        if(heroPeeks.indexOf(current) >= 0){
-          if(!heroVis.length){ hideCurrent(); return; }
-          if(now - since > 4500){
-            switching = true;
-            var prev = current;
-            setOn(prev, false); prev.classList.remove('is-laughing');
-            var cands = heroVis.filter(function(e){ return e !== prev; });
-            if(!cands.length) cands = heroVis;
-            var nx = cands[Math.floor(Math.random()*cands.length)];
-            setTimeout(function(){ showEl(nx, false); switching = false; }, 480);
-          }
-          return;
-        }
-        if(!inView(current) || now - since > 6500){ hideCurrent(); }
-        return;
-      }
-      if(heroVis.length){ showEl(heroVis[Math.floor(Math.random()*heroVis.length)], false); return; }
       var vis = peeks.filter(inView);
-      if(!vis.length) return;
-      if(now - offSince < 1200) return;
-      showEl(vis[Math.floor(Math.random()*vis.length)], true);
+      if(!vis.length){ if(current) hideCurrent(); return; }
+      if(current && !inView(current)) hideCurrent();
+      if(!current){ showEl(vis[Math.floor(Math.random()*vis.length)], true); return; }
+      var interval = isHeroZone(current) ? 4500 : 5500;
+      if(now - since > interval){
+        switching = true;
+        var prev = current;
+        setOn(prev, false); prev.classList.remove('is-laughing');
+        var cands = vis.filter(function(e){ return e !== prev; });
+        if(!cands.length) cands = vis;
+        var nx = cands[Math.floor(Math.random()*cands.length)];
+        setTimeout(function(){ showEl(nx, true); switching = false; }, 480);
+      }
     }, 600);
   })();
 

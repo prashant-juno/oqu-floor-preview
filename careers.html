@@ -441,7 +441,7 @@ a{ color:var(--accent); }
         <animate attributeName="r" values="1.8;2.4;1.8" dur="2.2s" repeatCount="indefinite"/>
       </circle>
     </g></defs></svg>
-<div class="oq-sheet" id="oq-sheet" data-pal="c">
+<div class="oq-sheet" id="oq-sheet" data-pal="l">
 
 <section class="oq-masthead" id="top">
   <div class="oq-letterhead">
@@ -627,7 +627,7 @@ a{ color:var(--accent); }
 <div class="oq-pal" role="group" aria-label="Colour palette">
   <span class="oq-pal-label">Palette</span>
   <div class="oq-pal-dots">
-    <button class="is-on" data-pal="c" title="Fintech green" aria-label="Fintech green" style="background:linear-gradient(135deg,#F5F7F4 45%,#1E6B4F 45%)"></button>
+    <button data-pal="c" title="Fintech green" aria-label="Fintech green" style="background:linear-gradient(135deg,#F5F7F4 45%,#1E6B4F 45%)"></button>
     <button data-pal="a" title="Ledger cream" aria-label="Ledger cream" style="background:linear-gradient(135deg,#F4EEE1 45%,#8A2B2E 45%)"></button>
     <button data-pal="b" title="Midnight brass" aria-label="Midnight brass" style="background:linear-gradient(135deg,#111A25 45%,#D9A441 45%)"></button>
     <button data-pal="d" title="Slate &amp; ember" aria-label="Slate and ember" style="background:linear-gradient(135deg,#F4F5F7 45%,#C2482F 45%)"></button>
@@ -638,7 +638,7 @@ a{ color:var(--accent); }
     <button data-pal="i" title="Porcelain &amp; delft" aria-label="Porcelain and delft" style="background:linear-gradient(135deg,#F6F8FA 45%,#2E6E8E 45%)"></button>
     <button data-pal="j" title="Olive &amp; sand" aria-label="Olive and sand" style="background:linear-gradient(135deg,#F5F2EA 45%,#5A6134 45%)"></button>
     <button data-pal="k" title="Burgundy noir" aria-label="Burgundy noir" style="background:linear-gradient(135deg,#171012 45%,#D4626D 45%)"></button>
-    <button data-pal="l" title="Steel &amp; mint" aria-label="Steel and mint" style="background:linear-gradient(135deg,#F4F6F6 45%,#0F7B6C 45%)"></button>
+    <button class="is-on" data-pal="l" title="Steel &amp; mint" aria-label="Steel and mint" style="background:linear-gradient(135deg,#F4F6F6 45%,#0F7B6C 45%)"></button>
     <button data-pal="m" title="Champagne" aria-label="Champagne and charcoal" style="background:linear-gradient(135deg,#F5F1E8 45%,#8C6A2F 45%)"></button>
   </div>
 </div>
@@ -664,8 +664,8 @@ a{ color:var(--accent); }
     if(reduce) return;
     var peeks = Array.prototype.slice.call(document.querySelectorAll('.oq-peek'));
     if(!peeks.length) return;
-    var says = ['oqu oqu!', 'oqu oqu oqu!', 'working 24/7!', 'hehehe!',
-      'never sleeps. ever.', 'oqu oqu oqu!'].concat(['join the floor!', 'we’re hiring!', 'desks are open!', 'come build with us!', 'your desk awaits!']);
+    var says = ['oqu oqu oqu!', 'working 24/7!', 'hehehe!',
+      'never sleeps. ever.', 'decision-ready!'].concat(['join the floor!', 'we’re hiring!', 'desks are open!', 'come build with us!', 'your desk awaits!']);
     var busy = false;
     function setOn(el, on){
       el.classList.toggle('is-on', on);
@@ -691,38 +691,33 @@ a{ color:var(--accent); }
       return r.bottom > 60 && r.top < window.innerHeight - 60;
     }
     var current = null, since = 0, offSince = 0, switching = false;
+    var lastSay = '';
     function bubble(el){
       var bb = el.querySelector('.oq-say2');
-      if(bb) bb.textContent = says[Math.floor(Math.random()*says.length)];
+      if(!bb) return;
+      var s = says[Math.floor(Math.random()*says.length)];
+      if(s === lastSay) s = says[(says.indexOf(s) + 1) % says.length];
+      lastSay = s; bb.textContent = s;
     }
     function showEl(el){ current = el; since = Date.now(); bubble(el); setOn(el, true); }
     function hideCurrent(){ if(!current) return; setOn(current, false); current = null; offSince = Date.now(); }
     setInterval(function(){
       if(document.hidden || switching) return;
       var now = Date.now();
-      var heroVis = heroPeeks.filter(inView);
-      if(current){
-        if(heroPeeks.indexOf(current) >= 0){
-          if(!heroVis.length){ hideCurrent(); return; }
-          if(now - since > 4500){
-            switching = true;
-            var prev = current;
-            setOn(prev, false);
-            var cands = heroVis.filter(function(e){ return e !== prev; });
-            if(!cands.length) cands = heroVis;
-            var nx = cands[Math.floor(Math.random()*cands.length)];
-            setTimeout(function(){ showEl(nx); switching = false; }, 480);
-          }
-          return;
-        }
-        if(!inView(current) || now - since > 6500){ hideCurrent(); }
-        return;
-      }
-      if(heroVis.length){ showEl(heroVis[Math.floor(Math.random()*heroVis.length)]); return; }
       var vis = peeks.filter(inView);
-      if(!vis.length) return;
-      if(now - offSince < 1200) return;
-      showEl(vis[Math.floor(Math.random()*vis.length)]);
+      if(!vis.length){ if(current) hideCurrent(); return; }
+      if(current && !inView(current)) hideCurrent();
+      if(!current){ showEl(vis[Math.floor(Math.random()*vis.length)]); return; }
+      var interval = /masthead/.test(current.parentElement.className || '') ? 4500 : 5500;
+      if(now - since > interval){
+        switching = true;
+        var prev = current;
+        setOn(prev, false);
+        var cands = vis.filter(function(e){ return e !== prev; });
+        if(!cands.length) cands = vis;
+        var nx = cands[Math.floor(Math.random()*cands.length)];
+        setTimeout(function(){ showEl(nx); switching = false; }, 480);
+      }
     }, 600);
   })();
   var btns = Array.prototype.slice.call(document.querySelectorAll('.oq-pal button'));
