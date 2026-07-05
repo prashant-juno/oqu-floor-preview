@@ -296,6 +296,14 @@ a{ color:var(--accent); }
 
 /* palette dock */
 .oq-pal{ max-width:min(320px, calc(100vw - 32px)); flex-wrap:wrap; }
+.oq-totop{ position:fixed; left:16px; bottom:16px; z-index:70; width:44px; height:44px; border-radius:50%;
+  border:1.5px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transform:translateY(8px);
+  transition:opacity .3s ease, transform .3s ease, visibility 0s .3s;
+  box-shadow:0 10px 24px -14px color-mix(in srgb, var(--ink) 45%, transparent); }
+.oq-totop.is-on{ opacity:1; visibility:visible; transform:none; transition:opacity .3s ease, transform .3s ease; }
+.oq-totop:hover{ color:var(--accent); border-color:var(--accent); }
+@media (max-width:720px){ .oq-totop{ left:10px; bottom:10px; width:40px; height:40px; } }
 .oq-pal{ position:fixed; right:16px; bottom:16px; z-index:70; display:flex; align-items:center;
   gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:999px;
   padding:8px 14px; box-shadow:0 18px 40px -22px color-mix(in srgb, var(--ink) 45%, transparent);
@@ -612,6 +620,10 @@ a{ color:var(--accent); }
     </div>
   </div>
 </footer>
+
+<button class="oq-totop" id="oq-totop" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 14 L12 6 L20 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 <div class="oq-pal" role="group" aria-label="Colour palette">
   <span class="oq-pal-label">Palette</span>
   <div class="oq-pal-dots">
@@ -639,14 +651,21 @@ a{ color:var(--accent); }
   var stored = null;
   try{ stored = localStorage.getItem('oq-pal'); }catch(e){}
   if(stored && /^[a-m]$/.test(stored)) sheet.setAttribute('data-pal', stored);
+  var toTop = document.getElementById('oq-totop');
+  if(toTop){
+    var onTopScroll = function(){ toTop.classList.toggle('is-on', window.scrollY > 700); };
+    window.addEventListener('scroll', onTopScroll, {passive:true}); onTopScroll();
+    toTop.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    });
+  }
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   (function(){
     if(reduce) return;
     var peeks = Array.prototype.slice.call(document.querySelectorAll('.oq-peek'));
     if(!peeks.length) return;
-    var says = ['oqu oqu!', 'oqu oqu oqu!', 'working 24/7!', 'hehehe!', 'deal’s ready!',
-      'no rekeying!', 'minutes, not days.', 'all checked, twice.', 'your policy, applied.',
-      'decision-ready!', 'never sleeps. ever.', 'files, not chaos.', 'oqu oqu oqu!'];
+    var says = ['oqu oqu!', 'oqu oqu oqu!', 'working 24/7!', 'hehehe!',
+      'never sleeps. ever.', 'oqu oqu oqu!'].concat(['join the floor!', 'we’re hiring!', 'desks are open!', 'come build with us!', 'your desk awaits!']);
     var busy = false;
     function setOn(el, on){
       el.classList.toggle('is-on', on);

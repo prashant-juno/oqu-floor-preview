@@ -276,6 +276,9 @@ body{ margin:0; }
 .oq-peek--who{ right:2%; top:-60px; transform:translateY(40%) rotate(-3deg); }
 .oq-peek--who img{ width:min(180px, 13vw); }
 .oq-peek--proof{ left:1%; top:-70px; transform:translateY(45%) rotate(3deg); }
+.oq-peek--tally{ right:4%; top:-58px; transform:translateY(44%) rotate(3deg); }
+.oq-peek--tally img{ width:min(165px, 12vw); }
+.oq-peek--tally.is-on{ transform:translateY(0) rotate(2deg); }
 .oq-peek--race{ right:3%; top:-62px; transform:translateY(42%) rotate(2deg); }
 .oq-peek--race img{ width:min(170px, 12vw); }
 .oq-peek--exch{ left:2%; top:-64px; transform:translateY(44%) rotate(-2deg); }
@@ -319,7 +322,7 @@ body{ margin:0; }
   .oq-peek--hang, .oq-peek--side, .oq-peek--plate{ display:none; }
   .oq-peek img{ filter:hue-rotate(var(--mshift,0deg)) drop-shadow(0 8px 14px color-mix(in srgb, var(--ink) 22%, transparent)); }
   .oq-peek--who img, .oq-peek--proof img, .oq-peek--race img, .oq-peek--exch img,
-  .oq-peek--decide img, .oq-peek--oath img, .oq-peek--st6 img, .oq-peek--st1 img{ width:88px; }
+  .oq-peek--decide img, .oq-peek--oath img, .oq-peek--st6 img, .oq-peek--st1 img, .oq-peek--tally img{ width:88px; }
   .oq-peek--endhang img{ width:78px; }
   .oq-peek--who, .oq-peek--race, .oq-peek--st1{ top:-44px; }
   .oq-peek--proof, .oq-peek--exch, .oq-peek--st6, .oq-peek--decide, .oq-peek--oath{ top:-46px; }
@@ -780,6 +783,14 @@ body{ margin:0; }
 .oq-pal-label{ font-family:var(--mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
   color:var(--ink2); }
 .oq-pal{ max-width:min(320px, calc(100vw - 32px)); }
+.oq-totop{ position:fixed; left:16px; bottom:16px; z-index:70; width:44px; height:44px; border-radius:50%;
+  border:1.5px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transform:translateY(8px);
+  transition:opacity .3s ease, transform .3s ease, visibility 0s .3s;
+  box-shadow:0 10px 24px -14px color-mix(in srgb, var(--ink) 45%, transparent); }
+.oq-totop.is-on{ opacity:1; visibility:visible; transform:none; transition:opacity .3s ease, transform .3s ease; }
+.oq-totop:hover{ color:var(--accent); border-color:var(--accent); }
+@media (max-width:720px){ .oq-totop{ left:10px; bottom:10px; width:40px; height:40px; } }
 .oq-pal-dots{ display:flex; flex-wrap:wrap; gap:7px; justify-content:flex-end; }
 .oq-pal button{ width:21px; height:21px; border-radius:50%; border:1.5px solid var(--line);
   cursor:pointer; padding:0; transition:transform .2s ease; }
@@ -2561,7 +2572,11 @@ body{ margin:0; }
 </section>
 
 <!-- tally -->
-<section class="oq-tally">
+<section class="oq-tally" style="position:relative">
+  <div class="oq-peek oq-peek--tally" data-on="translateY(0) rotate(2deg)" data-off="translateY(44%) rotate(3deg)" aria-hidden="true">
+    <span class="oq-say2">oqu oqu!</span>
+    <img data-key="u1" src="data:," alt="">
+  </div>
   <div class="oq-report oq-rv" id="oq-day">
     <div class="oq-report-head">
       <span class="oq-report-title">FLOOR REPORT · DAY ONE</span>
@@ -3061,6 +3076,9 @@ body{ margin:0; }
 </footer>
 
 <!-- palette switcher -->
+<button class="oq-totop" id="oq-totop" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 14 L12 6 L20 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 <div class="oq-pal" role="group" aria-label="Colour palette">
   <span class="oq-pal-label">Palette</span>
   <div class="oq-pal-dots">
@@ -3230,6 +3248,15 @@ body{ margin:0; }
   })();
 
   /* ——— automated decisioning switch ——— */
+  var toTop = $('#oq-totop');
+  if(toTop){
+    var onTopScroll = function(){ toTop.classList.toggle('is-on', window.scrollY > 700); };
+    window.addEventListener('scroll', onTopScroll, {passive:true}); onTopScroll();
+    toTop.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    });
+  }
+
   var sw = $('#oq-switch'), dockTitle = $('#oq-dock-title'), dockSub = $('#oq-dock-sub');
   function setPilot(agentMode){
     if(window.LendingFloor) window.LendingFloor.setMode(agentMode ? 'agent' : 'human');
