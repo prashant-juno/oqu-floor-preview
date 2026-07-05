@@ -341,6 +341,11 @@ a{ color:var(--accent); }
 .oq-peek--secL{ left:2%; top:-56px; transform:translateY(42%) rotate(-2deg); }
 .oq-peek--secR img, .oq-peek--secL img{ width:min(175px, 13vw); }
 .oq-peek--secR.is-on, .oq-peek--secL.is-on{ transform:translateY(0) rotate(1deg); }
+.oq-peek--endhang{ left:6%; top:-6px; transform:translateY(-62%); }
+.oq-peek--endhang.is-on{ transform:translateY(-4%); }
+.oq-peek--endhang img{ width:min(145px, 11vw); animation:oq-sway 4.5s ease-in-out infinite alternate; transform-origin:50% 0; }
+.oq-peek--endhang .oq-say2{ top:auto; bottom:-14px; left:-4px; transform:rotate(-4deg); }
+.oq-peek--endhang .oq-say2::after{ bottom:auto; top:-7px; transform:rotate(-135deg); }
 @media (max-width:1100px), (prefers-reduced-motion: reduce){ .oq-peek{ display:none; } }
 @media (max-width:720px){
   .oq-perch{ display:none; }
@@ -508,7 +513,7 @@ a{ color:var(--accent); }
 <section class="oq-sec oq-wrap" id="oq-roles" style="position:relative">
   <div class="oq-peek oq-peek--secL" data-on="translateY(0) rotate(1deg)" data-off="translateY(42%) rotate(-2deg)" aria-hidden="true">
     <span class="oq-say2">oqu oqu!</span>
-    <img data-key="ph" src="data:," alt="">
+    <img data-key="ps" src="data:," alt="">
   </div>
   <div class="oq-sec-head">
     <span class="oq-k">Hiring now</span>
@@ -553,7 +558,11 @@ a{ color:var(--accent); }
   </div>
 </section>
 
-<footer class="oq-colophon">
+<footer class="oq-colophon" style="position:relative">
+  <div class="oq-peek oq-peek--endhang" data-on="translateY(-4%)" data-off="translateY(-62%)" aria-hidden="true">
+    <img data-key="ph" src="data:," alt="">
+    <span class="oq-say2">oqu oqu!</span>
+  </div>
   <div class="oq-foot-in">
     <div class="oq-foot-col oq-foot-brand">
       <svg class="oq-logo oq-logo--foot" viewBox="0 0 177 44.0001" role="img" aria-label="OQU"><use href="#oquLogo"/></svg>
@@ -639,29 +648,44 @@ a{ color:var(--accent); }
     var lib = {};
     peeks.forEach(function(el){ var im = el.querySelector('img'); if(im && im.getAttribute('src').length > 100) lib[im.getAttribute('data-key')] = im.getAttribute('src'); });
     peeks.forEach(function(el){ var im = el.querySelector('img'); if(im && im.getAttribute('src').length < 100) im.src = lib[im.getAttribute('data-key')] || im.src; });
-    var offSince = 0;
-    function popEl(el, dwell){
-      busy = true;
+    var heroPeeks = peeks.filter(function(el){ return /masthead/.test(el.parentElement.className || ''); });
+    function inView(el){
+      var r = el.parentElement.getBoundingClientRect();
+      return r.bottom > 60 && r.top < window.innerHeight - 60;
+    }
+    var current = null, since = 0, offSince = 0, switching = false;
+    function bubble(el){
       var bb = el.querySelector('.oq-say2');
       if(bb) bb.textContent = says[Math.floor(Math.random()*says.length)];
-      setOn(el, true);
-      setTimeout(function(){ setOn(el, false); busy = false; offSince = Date.now(); }, dwell);
     }
-    function visiblePeeks(){
-      var vh = window.innerHeight, out = [];
-      peeks.forEach(function(el){
-        var r = el.parentElement.getBoundingClientRect();
-        if(r.bottom > 60 && r.top < vh - 60) out.push(el);
-      });
-      return out;
-    }
+    function showEl(el){ current = el; since = Date.now(); bubble(el); setOn(el, true); }
+    function hideCurrent(){ if(!current) return; setOn(current, false); current = null; offSince = Date.now(); }
     setInterval(function(){
-      if(busy || document.hidden) return;
-      var vis = visiblePeeks(); if(!vis.length) return;
-      var el = vis[Math.floor(Math.random()*vis.length)];
-      var hero = /masthead/.test(el.parentElement.className || '');
-      if(Date.now() - offSince < (hero ? 1500 : 3500)) return;
-      popEl(el, hero ? 3500 : 6500);
+      if(document.hidden || switching) return;
+      var now = Date.now();
+      var heroVis = heroPeeks.filter(inView);
+      if(current){
+        if(heroPeeks.indexOf(current) >= 0){
+          if(!heroVis.length){ hideCurrent(); return; }
+          if(now - since > 4500){
+            switching = true;
+            var prev = current;
+            setOn(prev, false);
+            var cands = heroVis.filter(function(e){ return e !== prev; });
+            if(!cands.length) cands = heroVis;
+            var nx = cands[Math.floor(Math.random()*cands.length)];
+            setTimeout(function(){ showEl(nx); switching = false; }, 480);
+          }
+          return;
+        }
+        if(!inView(current) || now - since > 6500){ hideCurrent(); }
+        return;
+      }
+      if(heroVis.length){ showEl(heroVis[Math.floor(Math.random()*heroVis.length)]); return; }
+      var vis = peeks.filter(inView);
+      if(!vis.length) return;
+      if(now - offSince < 3500) return;
+      showEl(vis[Math.floor(Math.random()*vis.length)]);
     }, 600);
   })();
   var btns = Array.prototype.slice.call(document.querySelectorAll('.oq-pal button'));
