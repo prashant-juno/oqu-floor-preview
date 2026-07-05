@@ -314,7 +314,17 @@ body{ margin:0; }
 .oq-peek--endhang img{ width:min(150px, 11vw); animation:oq-sway 4.5s ease-in-out infinite alternate; transform-origin:50% 0; }
 .oq-peek--endhang .oq-say2{ top:auto; bottom:-14px; left:-4px; transform:rotate(-4deg); }
 .oq-peek--endhang .oq-say2::after{ bottom:auto; top:-7px; transform:rotate(-135deg); }
-@media (max-width:1100px), (prefers-reduced-motion: reduce){ .oq-peek{ display:none; } }
+@media (prefers-reduced-motion: reduce){ .oq-peek{ display:none; } }
+@media (max-width:1100px){
+  .oq-peek--hang, .oq-peek--side, .oq-peek--plate{ display:none; }
+  .oq-peek img{ filter:hue-rotate(var(--mshift,0deg)) drop-shadow(0 8px 14px color-mix(in srgb, var(--ink) 22%, transparent)); }
+  .oq-peek--who img, .oq-peek--proof img, .oq-peek--race img, .oq-peek--exch img,
+  .oq-peek--decide img, .oq-peek--oath img, .oq-peek--st6 img, .oq-peek--st1 img{ width:88px; }
+  .oq-peek--endhang img{ width:78px; }
+  .oq-peek--who, .oq-peek--race, .oq-peek--st1{ top:-44px; }
+  .oq-peek--proof, .oq-peek--exch, .oq-peek--st6, .oq-peek--decide, .oq-peek--oath{ top:-46px; }
+  .oq-say2{ font-size:10.5px; padding:6px 11px; }
+}
 .oq-hero-mat{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
   padding:clamp(10px, 2vw, 22px); box-shadow:0 24px 60px -30px color-mix(in srgb, var(--ink) 35%, transparent); }
 .oq-hero-mat > svg{ width:100%; height:auto; aspect-ratio:1000/470; display:block; border-radius:6px; }
@@ -388,7 +398,7 @@ body{ margin:0; }
 .oq-who-card::after{ content:""; position:absolute; right:-24px; bottom:-24px; width:110px; height:110px;
   border:2.5px solid color-mix(in srgb, var(--accent) 22%, transparent); border-radius:50%; }
 .oq-who-glyph{ width:38px; height:38px; margin-bottom:14px; color:var(--accent); }
-.oq-who-card h3{ font-family:var(--disp); font-weight:600; font-size:clamp(19px,2.3vw,24px);
+.oq-who-card h3{ font-family:var(--hsans); font-weight:600; font-size:clamp(19px,2.3vw,24px);
   margin:0 0 8px; }
 .oq-who-card p{ margin:0 0 12px; color:var(--ink2); font-size:15.5px; }
 .oq-who-stat{ font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
@@ -396,12 +406,13 @@ body{ margin:0; }
 
 /* ————————————————————————————— footer ————————————————————————————— */
 .oq-colophon{ padding:0; }
-.oq-foot-in{ width:var(--w); margin:0 auto; padding:64px 0 28px; display:grid;
-  grid-template-columns:1.3fr 1fr 1fr 1.2fr; gap:36px; }
+.oq-foot-in{ width:var(--w); margin:0 auto; padding:72px 0 36px; display:grid;
+  grid-template-columns:1.3fr 1fr 1fr 1.2fr; gap:44px; }
 .oq-foot-col .oq-k{ color:var(--nightink2); display:block; margin-bottom:14px; }
-.oq-foot-brand p{ color:var(--nightink2); font-size:14.5px; margin:14px 0 0; max-width:30ch; }
-.oq-foot-col a{ display:block; font-family:var(--body); font-size:14.5px; color:var(--nightink);
-  text-decoration:none; padding:5px 0; letter-spacing:0; text-transform:none; }
+.oq-foot-brand p{ color:var(--nightink2); font-size:15px; line-height:1.6; margin:16px 0 0; max-width:30ch; }
+.oq-foot-col a{ display:block; font-family:var(--body); font-size:15.5px; color:var(--nightink);
+  text-decoration:none; padding:6px 0; letter-spacing:0; text-transform:none; }
+.oq-foot-col a:hover{ text-decoration:underline; text-underline-offset:3px; }
 .oq-foot-col a:hover{ color:color-mix(in srgb, var(--accent) 42%, var(--nightink)); }
 .oq-oath-in .oq-h2 em, .oq-day .oq-h2 em{ color:color-mix(in srgb, var(--accent) 42%, var(--nightink)); }
 .oq-sheet[data-pal="b"] .oq-foot-col a:hover{ color:var(--accent); }
@@ -431,7 +442,7 @@ body{ margin:0; }
 .oq-switch[aria-checked="true"] i{ left:32px; }
 .oq-afterword{ max-width:72ch; margin:30px auto 0; text-align:center;
   color:var(--ink2); font-size:18px; padding:0 16px; }
-.oq-dock-text b{ display:block; font-family:var(--disp); font-weight:600; font-size:17.5px;
+.oq-dock-text b{ display:block; font-family:var(--hsans); font-weight:600; font-size:17.5px;
   color:var(--ink); }
 .oq-dock-text span{ display:block; font-size:13.5px; color:var(--ink2); margin-top:2px; }
 
@@ -487,7 +498,7 @@ body{ margin:0; }
 .oq-wd-list button.is-on b{ color:var(--accent); }
 .oq-wd-pane{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
   padding:clamp(26px,4vw,44px); }
-.oq-wd-pane h3{ font-family:var(--disp); font-weight:600; font-size:clamp(23px,3vw,33px); margin:0 0 10px; }
+.oq-wd-pane h3{ font-family:var(--hsans); font-weight:600; font-size:clamp(23px,3vw,33px); margin:0 0 10px; }
 .oq-wd-pane p{ margin:0 0 16px; color:var(--ink2); font-size:16px; }
 .oq-wd-pane ul{ margin:0 0 20px; padding:0; list-style:none; }
 .oq-wd-pane li{ padding:8px 0 8px 26px; position:relative; color:var(--ink); font-size:15.5px; }
@@ -523,7 +534,7 @@ body{ margin:0; }
 .oq-lane-head{ display:flex; justify-content:space-between; align-items:baseline; gap:14px;
   margin-bottom:26px; }
 .oq-lane-head .oq-k{ font-size:13px; font-weight:700; color:var(--ink); }
-.oq-lane-tag{ font-family:var(--disp); font-style:italic; font-size:16px; color:var(--ink2); }
+.oq-lane-tag{ font-family:var(--body); font-style:normal; font-size:15px; color:var(--ink2); }
 .oq-lane--with .oq-lane-tag{ color:var(--accent); }
 .oq-lane-track{ position:relative; height:82px; }
 .oq-lane-line{ position:absolute; left:1%; right:1%; top:10px; border-top:2px dotted
@@ -680,7 +691,7 @@ body{ margin:0; }
 .oq-who-row:hover{ background:color-mix(in srgb, var(--surface) 70%, transparent); }
 .oq-who-row:hover::before{ width:4px; }
 .oq-who-idx{ font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; color:var(--accent); }
-.oq-who-name{ font-family:var(--disp); font-weight:600; font-size:clamp(20px,2.4vw,27px); line-height:1.2; }
+.oq-who-name{ font-family:var(--hsans); font-weight:600; font-size:clamp(20px,2.4vw,27px); line-height:1.2; }
 .oq-who-line{ color:var(--ink2); font-size:16px; }
 
 /* ————————————————————————————— switchboard ————————————————————————— */
@@ -724,7 +735,7 @@ body{ margin:0; }
 .oq-ledger-row{ display:flex; justify-content:space-between; align-items:baseline; gap:18px;
   padding:20px 24px; border-bottom:1px solid var(--line); }
 .oq-ledger-row:last-child{ border-bottom:none; }
-.oq-ledger-name{ font-family:var(--disp); font-weight:600; font-size:clamp(18px,2.3vw,23px); }
+.oq-ledger-name{ font-family:var(--hsans); font-weight:600; font-size:clamp(18px,2.3vw,23px); }
 .oq-ledger-role{ font-size:14.5px; color:var(--ink2); flex:1; }
 .oq-ledger-mark{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--accent);
   white-space:nowrap; }
@@ -1100,7 +1111,7 @@ body{ margin:0; }
     </g>
   </defs>
 
-  <rect id="background" x="0" y="0" width="1000" height="470" fill="#F7F9F8"/>
+  <rect id="background" x="12" y="12" width="976" height="446" rx="14" fill="#F7F9F8"/>
 
 <g id="wall">
     <line x1="14" y1="210" x2="986" y2="210" stroke="#8A9C90" stroke-width="1.1" opacity="0.75"/>
@@ -1419,10 +1430,10 @@ body{ margin:0; }
     <line id="gateLine" x1="963" y1="200" x2="963" y2="340" stroke="#9C7C36" stroke-width="2" stroke-dasharray="7 6"/>
   </g>
   <g id="modeBanner">
-    <rect id="mbRect" x="766" y="50" width="220" height="48" rx="24" fill="#FFFFFF" stroke="#9C7C36" stroke-width="1.8"/>
-    <circle id="mbDot" cx="790" cy="74" r="6" fill="#9C7C36"/>
-    <text id="mbText" x="806" y="71" font-size="11.5" letter-spacing="1" font-weight="bold" style="fill:#22302A">AUTOPILOT OFF</text>
-    <text id="mbText2" x="806" y="86" font-size="7.8" letter-spacing="0.5" font-weight="600" style="fill:#8A9C90">EVERY FILE WAITS FOR YOU</text>
+    <rect id="mbRect" x="752" y="50" width="220" height="48" rx="24" fill="#FFFFFF" stroke="#9C7C36" stroke-width="1.8"/>
+    <circle id="mbDot" cx="776" cy="74" r="6" fill="#9C7C36"/>
+    <text id="mbText" x="792" y="71" font-size="11.5" letter-spacing="1" font-weight="bold" style="fill:#22302A">AUTOPILOT OFF</text>
+    <text id="mbText2" x="792" y="86" font-size="7.8" letter-spacing="0.5" font-weight="600" style="fill:#8A9C90">EVERY FILE WAITS FOR YOU</text>
   </g>
   <g id="gateBtns" opacity="0" style="display:none">
     <g id="btnApprove" role="button" tabindex="-1" aria-label="Approve this deal" cursor="pointer" pointer-events="all">
@@ -1435,8 +1446,8 @@ body{ margin:0; }
     </g>
   </g>
   <g id="gateTag" opacity="0">
-    <rect id="gtRect" x="786" y="150" width="196" height="30" rx="15" fill="#FFFFFF" stroke="#9C7C36" stroke-width="1.8"/>
-    <text id="gtText" x="884" y="169.5" text-anchor="middle" font-size="10.5" letter-spacing="0.8" font-weight="bold" style="fill:#8A2B2E">WAITING FOR YOUR APPROVAL</text>
+    <rect id="gtRect" x="774" y="150" width="196" height="30" rx="15" fill="#FFFFFF" stroke="#9C7C36" stroke-width="1.8"/>
+    <text id="gtText" x="872" y="169.5" text-anchor="middle" font-size="10.5" letter-spacing="0.8" font-weight="bold" style="fill:#8A2B2E">WAITING FOR YOUR APPROVAL</text>
   </g>
   <g id="autoSwitch" display="none" tabindex="-1" role="switch" aria-checked="false" aria-label="Underwrite autopilot: on, OQU decides; off, you sign">
     <rect x="856" y="52" width="130" height="64" rx="6" fill="#FFFFFF" stroke="#22302A" stroke-width="1.4"/>
@@ -1459,15 +1470,15 @@ body{ margin:0; }
   </g>
 
 <g id="okBub" opacity="0">
-    <path id="okBubTail" d="M-7 11 L0 22 L7 11 Z" fill="#FFFFFF" stroke="#22302A" stroke-width="1.2"/>
-    <rect id="okBubR" x="-60" y="-13" width="120" height="26" rx="13" fill="#FFFFFF" stroke="#22302A" stroke-width="1.2"/>
-    <text id="okBubT" x="0" y="4" text-anchor="middle" font-size="11" letter-spacing="1.2" font-weight="bold" style="fill:#2F6E5A">THE NUMBERS AGREE.</text>
+    <path id="okBubTail" d="M-7 11 L0 22 L7 11 Z" fill="#2F6E5A" stroke="#22302A" stroke-width="1.2"/>
+    <rect id="okBubR" x="-60" y="-13" width="120" height="26" rx="13" fill="#2F6E5A" stroke="#22302A" stroke-width="1.2"/>
+    <text id="okBubT" x="0" y="4" text-anchor="middle" font-size="11" letter-spacing="1.2" font-weight="bold" style="fill:#F7F9F8">THE NUMBERS AGREE.</text>
   </g>
 
 <g id="brBub" opacity="0">
-    <path d="M-7 11 L0 22 L7 11 Z" fill="#FFFFFF" stroke="#22302A" stroke-width="1.2"/>
-    <rect id="brBubR" x="-52" y="-13" width="104" height="26" rx="13" fill="#FFFFFF" stroke="#22302A" stroke-width="1.2"/>
-    <text id="brBubT" x="0" y="4" text-anchor="middle" font-size="11" letter-spacing="1.2" font-weight="bold" style="fill:#22302A">NEW DEAL!</text>
+    <path d="M-7 11 L0 22 L7 11 Z" fill="#22302A" stroke="#22302A" stroke-width="1.2"/>
+    <rect id="brBubR" x="-52" y="-13" width="104" height="26" rx="13" fill="#22302A" stroke="#22302A" stroke-width="1.2"/>
+    <text id="brBubT" x="0" y="4" text-anchor="middle" font-size="11" letter-spacing="1.2" font-weight="bold" style="fill:#F7F9F8">NEW DEAL!</text>
   </g>
 
 <g id="crossTok" opacity="0">
@@ -1976,7 +1987,7 @@ body{ margin:0; }
         swKnob=q('swKnob'), swTrack=q('swTrack'), swState=q('swState'), autoSwitch=q('autoSwitch'),
         mbRect=q('mbRect'), mbDot=q('mbDot'), mbText=q('mbText'), mbText2=q('mbText2'),
         gateTag=q('gateTag'), gtRect=q('gtRect'), gtText=q('gtText'),
-        gapTag=q('gapTag'), gapTagR=q('gapTagR'), gapTagT=q('gapTagT'), okBub=q('okBub'), okBubR=q('okBubR'), okBubT=q('okBubT'), gateBtns=q('gateBtns'), btnApprove=q('btnApprove'), btnReject=q('btnReject'), crossTok=q('crossTok'), brBub=q('brBub'), brBubR=q('brBubR'), brBubT=q('brBubT'),
+        gapTag=q('gapTag'), gapTagR=q('gapTagR'), gapTagT=q('gapTagT'), okBub=q('okBub'), okBubR=q('okBubR'), okBubT=q('okBubT'), okBubTail=q('okBubTail'), gateBtns=q('gateBtns'), btnApprove=q('btnApprove'), btnReject=q('btnReject'), crossTok=q('crossTok'), brBub=q('brBub'), brBubR=q('brBubR'), brBubT=q('brBubT'),
         hourHand=q('clockHour'), minHand=q('clockMinute'), clockTime=q('clockTime'),
         satFlap=q('satchelFlap'), beamEl=q('scaleBeam'), ready=q('readyCount'), readySub=q('readySub'), pile=q('outPile'),
         stpR=[q('stpR0'),q('stpR1'),q('stpR2'),q('stpR3'),q('stpR4')], stpT=[q('stpT0'),q('stpT1'),q('stpT2'),q('stpT3'),q('stpT4')],
@@ -2298,6 +2309,9 @@ body{ margin:0; }
           okBubT.textContent=q3;
           var bw=Math.round(q3.length*7.4+26);
           okBubR.setAttribute('x',-bw/2); okBubR.setAttribute('width',bw);
+          var QCOL={2:'#2F6E5A',3:'#3A5670',4:'#6E4A9E',5:'#2F3B4C'};
+          okBubR.setAttribute('fill',QCOL[st]||'#2F6E5A');
+          okBubTail.setAttribute('fill',QCOL[st]||'#2F6E5A');
         }
         var okk=0.5+0.5*U(u,0.36,0.46,bk);
         okBub.setAttribute('transform','translate('+CX[CHAIN[st]]+',187) scale('+okk+')');
@@ -3041,7 +3055,7 @@ body{ margin:0; }
   <div class="oq-foot-bottom">
     <div class="oq-foot-bottom-in">
       <span class="oq-k">© MMXXVI OQU.ai · Agents collected, chased and cross-checked; a human approved every word.</span>
-      <span class="oq-k">Set in Fraunces and IBM Plex Mono · plate illustrative, no real cases or figures</span>
+      <span class="oq-k">The floor above is illustrative · no real cases or figures</span>
     </div>
   </div>
 </footer>
@@ -3156,6 +3170,7 @@ body{ margin:0; }
     function isHeroZone(el){ return /masthead|hero/.test(hostOf(el).className || ''); }
     var heroPeeks = peeks.filter(isHeroZone);
     function inView(el){
+      if(el.offsetParent === null) return false;
       var r = hostOf(el).getBoundingClientRect();
       return r.bottom > 60 && r.top < window.innerHeight - 60;
     }
@@ -3209,7 +3224,7 @@ body{ margin:0; }
       if(heroVis.length){ showEl(heroVis[Math.floor(Math.random()*heroVis.length)], false); return; }
       var vis = peeks.filter(inView);
       if(!vis.length) return;
-      if(now - offSince < 1800) return;
+      if(now - offSince < 1200) return;
       showEl(vis[Math.floor(Math.random()*vis.length)], true);
     }, 600);
   })();
@@ -3222,7 +3237,7 @@ body{ margin:0; }
     dockTitle.textContent = agentMode ? 'Automated decisioning: on' : 'Automated decisioning: off';
     dockSub.textContent = agentMode
       ? 'OQU underwrites inside your credit policy. Every approval stamped, logged and time-stamped.'
-      : 'Every file stops at the gate for your signature. Flip the switch and OQU underwrites inside your credit policy.';
+      : 'Every file stops at the gate for your approval. Flip the switch and OQU underwrites inside your credit policy.';
   }
   if(sw){
     sw.addEventListener('click', function(){ setPilot(sw.getAttribute('aria-checked') !== 'true'); });
