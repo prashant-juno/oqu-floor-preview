@@ -1190,10 +1190,7 @@ body{ margin:0; }
     <line x1="5" y1="8" x2="30" y2="8" stroke="#8A9C90" stroke-width="1" opacity="0.6"/>
   </g>
 
-  <g id="roleSigns">
-    <rect x="455" y="96" width="196" height="27" rx="13.5" fill="#1E6B4F" stroke="#17402F" stroke-width="1.1"/>
-    <text x="553" y="113.5" text-anchor="middle" font-size="10.5" letter-spacing="2.2" font-weight="bold" style="fill:#F4EEE1">OQU AI AGENTS</text>
-  </g>
+
   <g id="brokerQueue">
     <g id="qb1" transform="translate(54,392) scale(0.9)">
       <path d="M-14 -3 C-16 -28 -13 -47 0 -50 C13 -47 16 -28 14 -3 Z" fill="#5B6B7C" stroke="#22302A" stroke-width="1.2"/>
@@ -1232,7 +1229,10 @@ body{ margin:0; }
         <ellipse cx="2" cy="-78.4" rx="13.5" ry="2.2" fill="#22302A"/>
       </g>
     </g>
-    <text x="118" y="417.5" text-anchor="middle" class="cap" style="font-size:10px; letter-spacing:1.2px; fill:#22302A">BROKERS / APPLICANTS</text>
+    <g id="brokerPlate">
+      <rect x="43" y="403" width="150" height="19" rx="3.5" fill="#FFFFFF" stroke="#22302A" stroke-width="1.2"/>
+      <text x="118" y="416" text-anchor="middle" font-size="9.4" letter-spacing="1" font-weight="bold" style="fill:#22302A">BROKERS / APPLICANTS</text>
+    </g>
   </g>
   
   <g id="agent_intake" color="#5F7A6C">
@@ -1913,7 +1913,7 @@ body{ margin:0; }
     <rect id="stpR4" x="736" y="402" width="124" height="24" rx="12" fill="#EFF4F0"/>
     <text id="stpT4" x="798" y="417.5" fill="#5F7A6C">5 · PAID OUT</text>
   </g>
-  <text x="40" y="42" class="cap">FOLLOW ONE DEAL, FROM ENQUIRY TO DECISION · MINUTES, START TO FINISH</text>
+  <text x="500" y="52" text-anchor="middle" font-size="19" letter-spacing="3.2" font-weight="bold" style="fill:#22302A">OQU AI AGENTS IN ACTION</text>
   <text id="statusCaption" x="500" y="384" text-anchor="middle" class="capXL">11:04 P.M. · BROKER SUBMITS · INTAKE READS THE FILE</text>
   <g id="speedControl" font-size="8" letter-spacing="1">
     <text id="sp05" x="908" y="446" text-anchor="end">0.5×</text>
@@ -3143,40 +3143,40 @@ body{ margin:0; }
         setTimeout(function(){ el.classList.remove('is-laughing'); }, 2400);
       });
     });
-    function pop(idx){
-      if(busy || document.hidden) return;
+    function hostOf(el){ return el.parentElement; }
+    function isHeroZone(el){ return /masthead|hero/.test(hostOf(el).className || ''); }
+    var offSince = 0;
+    function popEl(el, dwell){
       busy = true;
-      lastPop = Date.now();
-      var el = peeks[idx===undefined ? Math.floor(Math.random()*peeks.length) : idx];
       var bubble = el.querySelector('.oq-say2');
       if(bubble) bubble.textContent = says[Math.floor(Math.random()*says.length)];
       setOn(el, true);
-      var giggle = setTimeout(function(){
-        if(bubble) bubble.textContent = laughs[Math.floor(Math.random()*laughs.length)];
-        el.classList.add('is-laughing');
-      }, 3400);
-      setTimeout(function(){ clearTimeout(giggle); el.classList.remove('is-laughing'); setOn(el, false); busy = false; }, 6500);
+      var giggle = null;
+      if(dwell > 4500){
+        giggle = setTimeout(function(){
+          if(bubble) bubble.textContent = laughs[Math.floor(Math.random()*laughs.length)];
+          el.classList.add('is-laughing');
+        }, 3400);
+      }
+      setTimeout(function(){ if(giggle) clearTimeout(giggle); el.classList.remove('is-laughing'); setOn(el, false); busy = false; offSince = Date.now(); }, dwell);
     }
-    var lastPop = 0;
-    if('IntersectionObserver' in window){
-      var io = new IntersectionObserver(function(ents){
-        ents.forEach(function(en){
-          if(!en.isIntersecting || busy) return;
-          var idx = peeks.indexOf(en.target.__peek);
-          if(idx < 0) return;
-          if(Date.now() - lastPop < 3500) return;
-          pop(idx);
-        });
-      }, {threshold:0.35});
+    function visiblePeeks(){
+      var vh = window.innerHeight, out = [];
       peeks.forEach(function(el){
-        var host = el.parentElement;
-        if(host && !/masthead|hero/.test(host.className||'')){ host.__peek = el; io.observe(host); }
+        var r = hostOf(el).getBoundingClientRect();
+        if(r.bottom > 60 && r.top < vh - 60) out.push(el);
       });
+      return out;
     }
-    setTimeout(function(){ pop(peeks.length - 1); }, 2400);
-    (function loop(){
-      setTimeout(function(){ pop(); loop(); }, 5000 + Math.random()*4000);
-    })();
+    /* hero zone: on 3.5s of every 5s. everywhere else: on 6.5s of every 10s. always in view. */
+    setInterval(function(){
+      if(busy || document.hidden) return;
+      var vis = visiblePeeks(); if(!vis.length) return;
+      var el = vis[Math.floor(Math.random()*vis.length)];
+      var hero = isHeroZone(el);
+      if(Date.now() - offSince < (hero ? 1500 : 3500)) return;
+      popEl(el, hero ? 3500 : 6500);
+    }, 600);
   })();
 
   /* ——— automated decisioning switch ——— */
