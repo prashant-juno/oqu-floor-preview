@@ -849,16 +849,14 @@ body{ margin:0; }
   .oq-lane-track{ height:64px; }
   .oq-stop{ font-size:8px; }
   .oq-stalltag{ transform:translateX(-45%); font-size:8.5px; }
-  .oq-rv{ opacity:1; transform:none; transition:none; }
-  .oq-route-head{ margin:56px auto 18px; }
   .oq-tally-row{ grid-template-columns:1fr; }
-  .oq-station{ grid-template-columns:40px 1fr; min-height:auto; padding:20px 0; }
+  .oq-station{ grid-template-columns:40px 1fr; min-height:auto; padding:8vh 0; }
   .oq-rail{ left:19px; }
-  .oq-filecol{ display:none; }
+  .oq-filecol{ left:-8px; width:56px; }
+  .oq-file{ width:56px; }
   .oq-st-node{ grid-column:1; grid-row:1; align-self:start; margin-top:8px; }
-  .oq-st-text, .oq-st-vig{ grid-column:2 !important; grid-row:auto; padding:0 0 10px 10px !important;
+  .oq-st-text, .oq-st-vig{ grid-column:2 !important; grid-row:auto; padding:0 0 18px 10px !important;
     text-align:left !important; }
-  .oq-st-vig{ max-width:250px; }
   .oq-station:nth-of-type(even) .oq-st-body{ margin-left:0; }
   .oq-who-row{ grid-template-columns:52px 1fr; }
   .oq-who-line{ grid-column:2; }
@@ -887,13 +885,7 @@ body{ margin:0; }
   }
 @media (max-width:720px){
   .oq-perch{ display:none; }
-  .oq-h1--stage{ margin-top:44px; }
-  .oq-h1-top{ font-size:24px; }
-  .oq-h1-big{ font-size:16vw; }
-  .oq-h1--stage em{ font-size:20px; margin-top:16px; }
-  .oq-hgroup{ margin-top:36px; }
-  .oq-ctarow{ margin:36px 8px 46px; }
-  .oq-ctarow .oq-btn{ width:min(100%, 340px); text-align:center; }
+  .oq-h1--stage{ margin-top:24px; }
   }
 @media (prefers-reduced-motion: reduce){
   .oq-h1 em{ animation:none; } .oq-day .oq-meter i.w80{ width:80%; } .oq-day .oq-day-line em.w80{ width:80%; }
